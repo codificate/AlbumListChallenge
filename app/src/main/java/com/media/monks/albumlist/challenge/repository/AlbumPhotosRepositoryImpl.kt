@@ -6,6 +6,12 @@ import com.media.monks.albumlist.challenge.data.db.dao.PhotoDao
 import com.media.monks.albumlist.challenge.data.db.entity.Album
 import com.media.monks.albumlist.challenge.data.db.entity.Photos
 import com.media.monks.albumlist.challenge.data.network.AlbumPhotoDataSource
+import com.media.monks.albumlist.challenge.data.toAlbumEntity
+import com.media.monks.albumlist.challenge.data.toPhotosEntity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AlbumPhotosRepositoryImpl(
     private val albumDao: AlbumDao,
@@ -15,13 +21,41 @@ class AlbumPhotosRepositoryImpl(
 
     init {
         albumPhotoDataSource.apply {
-            downloadedAlbums.observeForever {  }
-            downloadedPhotos.observeForever {  }
+            downloadedAlbums.observeForever { albums -> persistAlbums(albums.toAlbumEntity()) }
+            downloadedPhotos.observeForever { photos -> persistPhotos(photos.toPhotosEntity()) }
         }
     }
 
     override suspend fun getAllAlbums(): LiveData<List<Album>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return withContext(Dispatchers.IO) {
+            fetchAlbums()
+            return@withContext albumDao.getAll()
+        }
+    }
+
+    override suspend fun saveAllPhotos(): Photos{
+        return withContext(Dispatchers.IO) {
+            fetchPhotos()
+            return@withContext photoDao.getFirst()
+        }
+    }
+
+    override suspend fun getPhotosByAlbumId(id: Int): LiveData<List<Photos>> {
+        return withContext(Dispatchers.IO) {
+            return@withContext photoDao.getByAlbumId(id)
+        }
+    }
+
+    private fun persistAlbums(albumList: List<Album>){
+        GlobalScope.launch(Dispatchers.IO){
+            albumDao.bulk(albumList)
+        }
+    }
+
+    private fun persistPhotos(photosList: List<Photos>){
+        GlobalScope.launch(Dispatchers.IO){
+            photoDao.bulk(photosList)
+        }
     }
 
     private suspend fun fetchAlbums(){
@@ -29,10 +63,6 @@ class AlbumPhotosRepositoryImpl(
         if (album.id==null){
             albumPhotoDataSource.fetchAlbums()
         }
-    }
-
-    override suspend fun getPhotosByAlbumId(id: Int): LiveData<List<Photos>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     private suspend fun fetchPhotos(){

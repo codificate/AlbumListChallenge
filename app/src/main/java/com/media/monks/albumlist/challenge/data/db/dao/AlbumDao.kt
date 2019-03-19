@@ -11,7 +11,7 @@ import com.media.monks.albumlist.challenge.data.db.entity.Album
 interface AlbumDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun bulkAlbums(albumList: List<Album>)
+    fun bulk(albumList: List<Album>)
 
     @Query("select * from album")
     fun getAll(): LiveData<List<Album>>
