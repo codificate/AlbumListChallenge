@@ -5,6 +5,7 @@ import com.media.monks.albumlist.challenge.common.lazyDeferred
 import com.media.monks.albumlist.challenge.repository.AlbumPhotosRepository
 
 class PhotosViewModel(
+    private val albumId: Int,
     private val repository: AlbumPhotosRepository
 ) : ViewModel() {
 
@@ -12,7 +13,7 @@ class PhotosViewModel(
         repository.saveAllPhotos()
     }
 
-    fun fetchPhotosById(id: Int) = lazyDeferred {
-        repository.getPhotosByAlbumId(id)
+    val fetchPhotosById by lazyDeferred {
+        repository.getPhotosByAlbumId(albumId)
     }
 }

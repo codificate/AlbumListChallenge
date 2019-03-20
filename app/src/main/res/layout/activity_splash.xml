@@ -39,7 +39,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:indeterminate="true"
-            android:indeterminateTint="@color/primaryDarkColor"
+            android:indeterminateTint="@color/secondaryDarkColor"
             android:foregroundTint="@color/primaryColor"
             android:progressTint="@color/primaryColor"
             android:secondaryProgressTint="@color/primaryLightColor"
@@ -65,6 +65,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/progressBar_loading"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.0"
+            android:textSize="18sp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

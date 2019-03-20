@@ -7,6 +7,7 @@ import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.media.monks.albumlist.challenge.R
 import com.media.monks.albumlist.challenge.data.toAlbumViewHolder
@@ -35,6 +36,7 @@ class AlbumListFragment : ScopedFragment(), KodeinAware {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
         albumViewModel = ViewModelProviders.of(this, albumViewModelFactory)
             .get(AlbumViewModel::class.java)
 
@@ -52,7 +54,7 @@ class AlbumListFragment : ScopedFragment(), KodeinAware {
         })
     }
 
-    private fun initRecyclerView(items: List<AlbumItem>){
+    private fun initRecyclerView(items: List<AlbumItem>) {
         val groupAdapter = GroupAdapter<ViewHolder>().apply {
             addAll(items)
         }
@@ -60,6 +62,18 @@ class AlbumListFragment : ScopedFragment(), KodeinAware {
         recyclerView.apply {
             layoutManager = LinearLayoutManager(this@AlbumListFragment.context)
             adapter = groupAdapter
+
+
+            groupAdapter.setOnItemClickListener { item, view ->
+                (item as? AlbumItem)?.let {
+                    showPhotosByAlbum(it.album.id, view)
+                }
+            }
         }
+    }
+
+    private fun showPhotosByAlbum(id: Int?, view: View) {
+        val actionDetail = AlbumListFragmentDirections.actionDetail(id!!)
+        Navigation.findNavController(view).navigate(actionDetail)
     }
 }

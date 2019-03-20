@@ -8,15 +8,19 @@
             android:id="@+id/albumListFragment"
             android:name="com.media.monks.albumlist.challenge.ui.fragment.AlbumListFragment"
             android:label="@string/album_view_name"
-            tools:layout="@layout/fragment_album_list"/>
-    <!--fragment
+            tools:layout="@layout/fragment_album_list" >
+        <action
+                android:id="@+id/actionDetail"
+                app:destination="@id/photoListFragment" />
+    </fragment>
+    <fragment
             android:id="@+id/photoListFragment"
-            android:name="com.chileautos.carsales.ui.fragment.CarPostListFragment"
-            android:label="@string/car_post_list_fragment"
-            tools:layout="@layout/car_post_list_fragment" >
+            android:name="com.media.monks.albumlist.challenge.ui.fragment.PhotoListFragment"
+            android:label="@string/photo_view_name"
+            tools:layout="@layout/fragment_photo_list" >
         <argument
                 android:name="albumId"
                 app:argType="integer" />
-    </fragment-->
+    </fragment>
 
 </navigation>

@@ -11,7 +11,7 @@ fun List<AlbumsReponse>.toAlbumEntity(): List<Album>{
 }
 
 fun List<PhotosReponse>.toPhotosEntity(): List<Photos>{
-    return this.map { Photos(it.id, it.albumId, it.thumbnailUrl, it.title, it.title) }
+    return this.map { Photos(it.id, it.albumId, it.thumbnailUrl, it.title, it.url) }
 }
 
 fun List<Album>.toAlbumViewHolder(): List<AlbumItem>{

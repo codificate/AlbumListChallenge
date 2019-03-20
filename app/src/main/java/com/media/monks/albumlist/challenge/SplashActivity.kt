@@ -19,6 +19,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.closestKodein
+import org.kodein.di.generic.factory
 import org.kodein.di.generic.instance
 import kotlin.coroutines.CoroutineContext
 
@@ -33,7 +34,7 @@ class SplashActivity : AppCompatActivity(), CoroutineScope, KodeinAware {
     private val albumViewModelFactory: AlbumViewModelFactory by instance()
     private lateinit var albumViewModel: AlbumViewModel
 
-    private val photosViewModelFactory: PhotosViewModelFactory by instance()
+    private val photosViewModelFactory: ((Int) -> PhotosViewModelFactory) by factory()
     private lateinit var photosViewModel: PhotosViewModel
 
     override val coroutineContext: CoroutineContext
@@ -47,7 +48,7 @@ class SplashActivity : AppCompatActivity(), CoroutineScope, KodeinAware {
         albumViewModel = ViewModelProviders.of(this, albumViewModelFactory)
             .get(AlbumViewModel::class.java)
 
-        photosViewModel = ViewModelProviders.of(this, photosViewModelFactory)
+        photosViewModel = ViewModelProviders.of(this, photosViewModelFactory(0))
             .get(PhotosViewModel::class.java)
 
         isFirstRun()

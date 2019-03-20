@@ -10,10 +10,7 @@ import com.media.monks.albumlist.challenge.viemodel.photos.PhotosViewModelFactor
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.androidModule
-import org.kodein.di.generic.bind
-import org.kodein.di.generic.instance
-import org.kodein.di.generic.provider
-import org.kodein.di.generic.singleton
+import org.kodein.di.generic.*
 
 class AlbumListApplication: Application(), KodeinAware {
     override val kodein = Kodein.lazy {
@@ -25,9 +22,9 @@ class AlbumListApplication: Application(), KodeinAware {
         bind<ConnectivityInterceptor>() with singleton { ConnectivityInterceptorImpl(instance()) }
         bind() from singleton { AlbumApiService(instance()) }
         bind<AlbumPhotoDataSource>() with singleton { AlbumPhotoDataSourceImpl(instance()) }
-        bind() from provider { AlbumViewModelFactory(instance()) }
-        bind() from provider { PhotosViewModelFactory(instance()) }
         bind<AlbumPhotosRepository>() with singleton { AlbumPhotosRepositoryImpl(instance(), instance(), instance()) }
+        bind() from provider { AlbumViewModelFactory(instance()) }
+        bind() from factory { albumId: Int -> PhotosViewModelFactory(albumId, instance()) }
     }
 
     override fun onCreate() {
