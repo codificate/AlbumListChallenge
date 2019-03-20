@@ -8,6 +8,10 @@ class AlbumViewModel(
     private val repository: AlbumPhotosRepository
 ) : ViewModel(){
 
+    val initAlbums by lazyDeferred {
+        repository.saveAllAlbums()
+    }
+
     val fetchAlbums by lazyDeferred {
         repository.getAllAlbums()
     }

@@ -8,4 +8,5 @@ interface AlbumPhotosRepository {
     suspend fun getAllAlbums(): LiveData<List<Album>>
     suspend fun getPhotosByAlbumId(id: Int): LiveData<List<Photos>>
     suspend fun saveAllPhotos(): Photos
+    suspend fun saveAllAlbums(): Album
 }

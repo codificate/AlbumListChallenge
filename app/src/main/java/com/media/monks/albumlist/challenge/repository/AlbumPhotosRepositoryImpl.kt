@@ -28,7 +28,6 @@ class AlbumPhotosRepositoryImpl(
 
     override suspend fun getAllAlbums(): LiveData<List<Album>> {
         return withContext(Dispatchers.IO) {
-            fetchAlbums()
             return@withContext albumDao.getAll()
         }
     }
@@ -37,6 +36,13 @@ class AlbumPhotosRepositoryImpl(
         return withContext(Dispatchers.IO) {
             fetchPhotos()
             return@withContext photoDao.getFirst()
+        }
+    }
+
+    override suspend fun saveAllAlbums(): Album {
+        return withContext(Dispatchers.IO) {
+            fetchAlbums()
+            return@withContext albumDao.getFirst()
         }
     }
 

@@ -8,7 +8,7 @@ class PhotosViewModel(
     private val repository: AlbumPhotosRepository
 ) : ViewModel() {
 
-    val fetchPhotos by lazyDeferred {
+    val initPhotos by lazyDeferred {
         repository.saveAllPhotos()
     }
 

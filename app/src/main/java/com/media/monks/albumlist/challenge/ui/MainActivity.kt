@@ -1,7 +1,8 @@
-package com.media.monks.albumlist.challenge
+package com.media.monks.albumlist.challenge.ui
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.media.monks.albumlist.challenge.R
 
 class MainActivity : AppCompatActivity() {
 
