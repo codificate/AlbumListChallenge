@@ -17,6 +17,6 @@ interface AlbumDao {
     fun getAll(): LiveData<List<Album>>
 
     @Query("select * from album limit 1")
-    fun getFirst(): Album
+    fun getFirst(): LiveData<Album>
 
 }

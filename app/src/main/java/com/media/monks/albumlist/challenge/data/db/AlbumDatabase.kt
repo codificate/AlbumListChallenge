@@ -9,7 +9,7 @@ import com.media.monks.albumlist.challenge.data.db.dao.PhotoDao
 import com.media.monks.albumlist.challenge.data.db.entity.Album
 import com.media.monks.albumlist.challenge.data.db.entity.Photos
 
-@Database(entities = [Album::class, Photos::class], version = 1, exportSchema = true)
+@Database(entities = [Album::class, Photos::class], version = 1, exportSchema = false)
 abstract class AlbumDatabase : RoomDatabase() {
 
     abstract fun albumDao(): AlbumDao
@@ -25,7 +25,7 @@ abstract class AlbumDatabase : RoomDatabase() {
 
         private fun buildDatabase(context: Context) =
             Room.databaseBuilder(context.applicationContext,
-                AlbumDatabase::class.java, "carSaleEntries.db")
+                AlbumDatabase::class.java, "AlbumDatabase.db")
                 .build()
     }
 }

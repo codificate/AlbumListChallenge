@@ -17,6 +17,6 @@ interface PhotoDao {
     fun getByAlbumId(id: Int): LiveData<List<Photos>>
 
     @Query("select * from photos limit 1")
-    fun getFirst(): Photos
+    fun getFirst(): LiveData<Photos>
 
 }

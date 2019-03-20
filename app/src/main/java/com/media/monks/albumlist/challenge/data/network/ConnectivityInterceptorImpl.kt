@@ -3,7 +3,6 @@ package com.media.monks.albumlist.challenge.data.network
 import android.content.Context
 import android.net.ConnectivityManager
 import com.media.monks.albumlist.challenge.common.NoConnectivityException
-import com.resocoder.forecastmvvm.data.network.ConnectivityInterceptor
 import okhttp3.Interceptor
 import okhttp3.Response
 

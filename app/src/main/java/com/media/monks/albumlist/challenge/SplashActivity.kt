@@ -1,12 +1,18 @@
 package com.media.monks.albumlist.challenge
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.view.View.GONE
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.media.monks.albumlist.challenge.ui.MainActivity
 import com.media.monks.albumlist.challenge.viemodel.album.AlbumViewModel
 import com.media.monks.albumlist.challenge.viemodel.album.AlbumViewModelFactory
 import com.media.monks.albumlist.challenge.viemodel.photos.PhotosViewModel
 import com.media.monks.albumlist.challenge.viemodel.photos.PhotosViewModelFactory
+import kotlinx.android.synthetic.main.activity_splash.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -16,9 +22,13 @@ import org.kodein.di.android.closestKodein
 import org.kodein.di.generic.instance
 import kotlin.coroutines.CoroutineContext
 
+
 class SplashActivity : AppCompatActivity(), CoroutineScope, KodeinAware {
     override val kodein by closestKodein()
     private lateinit var job: Job
+
+    private var albumProcessFinished: Boolean = false
+    private var photoProcessFinished: Boolean = false
 
     private val albumViewModelFactory: AlbumViewModelFactory by instance()
     private lateinit var albumViewModel: AlbumViewModel
@@ -40,25 +50,59 @@ class SplashActivity : AppCompatActivity(), CoroutineScope, KodeinAware {
         photosViewModel = ViewModelProviders.of(this, photosViewModelFactory)
             .get(PhotosViewModel::class.java)
 
-        initData()
+        isFirstRun()
+    }
+
+    private fun isFirstRun(){
+        val isFirstRun = getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE)
+            .getBoolean("isFirstRun", true)
+
+        if (isFirstRun) {
+            getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE).edit()
+                .putBoolean("isFirstRun", false).apply()
+            initData()
+        } else {
+            continueToMainActivity()
+        }
     }
 
     private fun initData() = launch(Dispatchers.Main){
-        val album = albumViewModel.initAlbums.await()
-        val photo = photosViewModel.initPhotos.await()
 
-        if (album.id!=null&&photo.id!=null){
+        val album = albumViewModel.initAlbums.await()
+        val photos= photosViewModel.initPhotos.await()
+
+        album.observe(this@SplashActivity, Observer {album ->
+            if (album==null) return@Observer
+            albumProcessFinished = true
+            ifInitDataIsDone()
+        })
+
+        photos.observe(this@SplashActivity, Observer {photos ->
+            if (photos==null) return@Observer
+            photoProcessFinished = true
+            ifInitDataIsDone()
+        })
+    }
+
+    private fun ifInitDataIsDone(){
+        if (albumProcessFinished && photoProcessFinished){
+            albumProcessFinished = false
+            photoProcessFinished = false
+            group_loading.visibility = GONE
+            job.cancel()
             continueToMainActivity()
         }
     }
 
     private fun continueToMainActivity(){
-
+        val intentToContinue = Intent(applicationContext, MainActivity::class.java)
+        intentToContinue.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+        startActivity(intentToContinue)
+        finish()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         job.cancel()
     }
-
 }

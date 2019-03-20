@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/mobile_navigation"
+            xmlns:tools="http://schemas.android.com/tools"
+            app:startDestination="@id/albumListFragment">
+    <fragment
+            android:id="@+id/albumListFragment"
+            android:name="com.media.monks.albumlist.challenge.ui.fragment.AlbumListFragment"
+            android:label="@string/album_view_name"
+            tools:layout="@layout/fragment_album_list"/>
+    <!--fragment
+            android:id="@+id/photoListFragment"
+            android:name="com.chileautos.carsales.ui.fragment.CarPostListFragment"
+            android:label="@string/car_post_list_fragment"
+            tools:layout="@layout/car_post_list_fragment" >
+        <argument
+                android:name="albumId"
+                app:argType="integer" />
+    </fragment-->
+
+</navigation>

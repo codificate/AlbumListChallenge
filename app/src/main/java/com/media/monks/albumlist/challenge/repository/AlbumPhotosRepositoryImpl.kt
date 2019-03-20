@@ -32,14 +32,14 @@ class AlbumPhotosRepositoryImpl(
         }
     }
 
-    override suspend fun saveAllPhotos(): Photos{
+    override suspend fun saveAllPhotos(): LiveData<Photos> {
         return withContext(Dispatchers.IO) {
             fetchPhotos()
             return@withContext photoDao.getFirst()
         }
     }
 
-    override suspend fun saveAllAlbums(): Album {
+    override suspend fun saveAllAlbums(): LiveData<Album> {
         return withContext(Dispatchers.IO) {
             fetchAlbums()
             return@withContext albumDao.getFirst()
@@ -66,14 +66,14 @@ class AlbumPhotosRepositoryImpl(
 
     private suspend fun fetchAlbums(){
         val album = albumDao.getFirst()
-        if (album.id==null){
+        if (album.value?.id==null){
             albumPhotoDataSource.fetchAlbums()
         }
     }
 
     private suspend fun fetchPhotos(){
-        val album = photoDao.getFirst()
-        if (album.id==null){
+        val photo = photoDao.getFirst()
+        if (photo.value?.id==null){
             albumPhotoDataSource.fetchPhotos()
         }
     }
